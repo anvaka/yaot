@@ -12,6 +12,7 @@ function createTree(options) {
   var api = {
     init: init,
     bounds: getBounds,
+    // TODO: Should this be outside of this module?
     rayTrace: rayTrace,
     getRoot: getRoot
   };
@@ -24,13 +25,13 @@ function createTree(options) {
 
   function rayTrace(rayOrigin, rayDirection, far) {
     if (far === undefined) far = Number.POSITIVE_INFINITY;
-    intersectCheck.precise = preciseCheck;
 
     var indices = [];
     root.query(indices, originalArray, intersectCheck);
     return indices;
 
     function intersectCheck(candidate) {
+      // using http://wscg.zcu.cz/wscg2000/Papers_2000/X31.pdf
       var half = candidate.half;
       var t1 = (candidate.x - half - rayOrigin.x) / rayDirection.x,
         t2 = (candidate.x + half - rayOrigin.x) / rayDirection.x,
@@ -45,10 +46,6 @@ function createTree(options) {
 
       tmin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
       return tmin <= tmax && tmin <= far;
-    }
-
-    function preciseCheck() {
-      return true;
     }
   }
 
