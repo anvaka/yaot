@@ -1,0 +1,23 @@
+{
+  "name": "yaot",
+  "version": "1.0.0",
+  "description": "Yet another octree",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "quadtree",
+    "octree",
+    "oct",
+    "tree",
+    "octrie",
+    "quadtrie"
+  ],
+  "author": "Andrei Kashcha",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anvaka/yaot"
+  }
+}
