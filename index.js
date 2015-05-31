@@ -12,8 +12,29 @@ function createTree(options) {
   var api = {
     init: init,
     bounds: getBounds,
-    // TODO: Should this be outside of this module?
-    rayTrace: rayTrace,
+
+    /**
+     * Fires a ray from `rayOrigin` into `rayDirection` and collects all points
+     * that lie in the octants intersected by the ray.
+     *
+     * This method implements An Efficient Parametric Algorithm for Octree Traversal
+     * described in http://wscg.zcu.cz/wscg2000/Papers_2000/X31.pdf
+     *
+     * @param {Vector3} rayOrigin x,y,z coordinates where ray starts
+     * @param {Vector3} rayDirection normalized x,y,z direction where ray shoots.
+     * @param {number+} far maximum length of the ray. POSITIVE_INFINITY by default
+     *
+     * @return {Array} of indices in the source array. Each index represnts a start
+     * of the x,y,z triplet of a point, that lies in the intersected octant.
+     */
+    intersectRay: intersectRay,
+
+    /**
+     * Once you have collected points from the octants intersected by a ray
+     * (`intersectRay()` method), it may be worth to query points from the surrouning
+     * area.
+     */
+    intersectSphere: intersectSphere,
     getRoot: getRoot
   };
 
@@ -23,12 +44,44 @@ function createTree(options) {
     return root;
   }
 
-  function rayTrace(rayOrigin, rayDirection, far) {
+  function intersectSphere(cx, cy, cz, r) {
+    var indices = [];
+    var r2 = r * r;
+    root.query(indices, originalArray, intersectCheck, preciseCheck);
+    return indices;
+
+    // http://stackoverflow.com/questions/4578967/cube-sphere-intersection-test
+    function intersectCheck(candidate) {
+      var dist = r2;
+      var half = candidate.half;
+      if (cx < candidate.x - half) dist -= sqr(cx - (candidate.x - half));
+      else if (cx > candidate.x + half) dist -= sqr(cx - (candidate.x + half));
+
+      if (cy < candidate.y - half) dist -= sqr(cy - (candidate.y - half));
+      else if (cy > candidate.y + half) dist -= sqr(cy - (candidate.y + half));
+
+      if (cz < candidate.z - half) dist -= sqr(cz - (candidate.z - half));
+      else if (cz > candidate.z + half) dist -= sqr(cz - (candidate.z + half));
+      return dist > 0;
+    }
+
+    function preciseCheck(x, y, z) {
+      return sqr(x - cx) + sqr(y - cy) + sqr(z - cz) < r2;
+    }
+  }
+
+  function sqr(x) {
+    return x * x;
+  }
+
+  function intersectRay(rayOrigin, rayDirection, near, far) {
+    if (near === undefined) near = 0;
     if (far === undefined) far = Number.POSITIVE_INFINITY;
+    near *= near;
 
     var indices = [];
-    root.query(indices, originalArray, intersectCheck);
-    return indices;
+    root.query(indices, originalArray, intersectCheck, farEnough);
+    return indices.sort(byDistanceToCamera);
 
     function intersectCheck(candidate) {
       // using http://wscg.zcu.cz/wscg2000/Papers_2000/X31.pdf
@@ -46,6 +99,31 @@ function createTree(options) {
 
       tmin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
       return tmin <= tmax && tmin <= far;
+    }
+
+    function farEnough(x, y, z) {
+      var dist = (x - rayOrigin.x) * (x - rayOrigin.x) +
+                  (y - rayOrigin.y) * (y - rayOrigin.y) +
+                  (z - rayOrigin.z) * (z - rayOrigin.z);
+      return dist >= near;
+    }
+
+    function byDistanceToCamera(idx0, idx1) {
+      var x0 = rayOrigin[idx0];
+      var y0 = rayOrigin[idx0 + 1];
+      var z0 = rayOrigin[idx0 + 2];
+      var dist0 = (x0 - rayOrigin.x) * (x0 - rayOrigin.x) +
+                  (y0 - rayOrigin.y) * (y0 - rayOrigin.y) +
+                  (z0 - rayOrigin.z) * (z0 - rayOrigin.z);
+
+      var x1 = rayOrigin[idx1];
+      var y1 = rayOrigin[idx1 + 1];
+      var z1 = rayOrigin[idx1 + 2];
+
+      var dist1 = (x1 - rayOrigin.x) * (x1 - rayOrigin.x) +
+                  (y1 - rayOrigin.y) * (y1 - rayOrigin.y) +
+                  (z1 - rayOrigin.z) * (z1 - rayOrigin.z);
+      return dist0 - dist1;
     }
   }
 
