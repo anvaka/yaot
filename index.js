@@ -22,6 +22,7 @@ function createTree(options) {
      *
      * @param {Vector3} rayOrigin x,y,z coordinates where ray starts
      * @param {Vector3} rayDirection normalized x,y,z direction where ray shoots.
+     * @param {number+} near minimum distance from the ray origin. 0 by default.
      * @param {number+} far maximum length of the ray. POSITIVE_INFINITY by default
      *
      * @return {Array} of indices in the source array. Each index represnts a start
