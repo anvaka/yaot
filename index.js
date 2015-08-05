@@ -1,16 +1,19 @@
 var Bounds3 = require('./lib/bounds3.js');
 var TreeNode = require('./lib/treeNode.js');
 var EmptyRegion = new Bounds3();
+var asyncFor = require('rafor');
 
 module.exports = createTree;
 
 function createTree(options) {
   options = options || {};
+  var noPoints = [];
 
   var root;
   var originalArray;
   var api = {
     init: init,
+    initAsync: initAsync,
     bounds: getBounds,
 
     /**
@@ -46,6 +49,10 @@ function createTree(options) {
   }
 
   function intersectSphere(cx, cy, cz, r) {
+    if (!root) {
+      // Most likely we are not initialized yet
+      return noPoints;
+    }
     var indices = [];
     var r2 = r * r;
     root.query(indices, originalArray, intersectCheck, preciseCheck);
@@ -76,6 +83,11 @@ function createTree(options) {
   }
 
   function intersectRay(rayOrigin, rayDirection, near, far) {
+    if (!root) {
+      // Most likely we are not initialized yet
+      return noPoints;
+    }
+
     if (near === undefined) near = 0;
     if (far === undefined) far = Number.POSITIVE_INFINITY;
     near *= near;
@@ -129,14 +141,37 @@ function createTree(options) {
   }
 
   function init(points) {
-    if (!points) throw new Error('Points array is required for quadtree to work');
-    if (typeof points.length !== 'number') throw new Error('Points should be array-like object');
-    if (points.length % 3 !== 0) throw new Error('Points array should consist of series of x,y,z coordinates and be multiple of 3');
+    verifyPointsInvariant(points);
     originalArray = points;
     root = createRootNode(points);
     for (var i = 0; i < points.length; i += 3) {
       root.insert(i, originalArray, 0);
     }
+  }
+
+  function initAsync(points, doneCallback) {
+    verifyPointsInvariant(points);
+
+    var tempRoot = createRootNode(points);
+    asyncFor(points, insertToRoot, doneInternal, { step: 3 });
+
+    function insertToRoot(element, i) {
+      tempRoot.insert(i, points, 0);
+    }
+
+    function doneInternal() {
+      originalArray = points;
+      root = tempRoot;
+      if (typeof doneCallback === 'function') {
+        doneCallback(api);
+      }
+    }
+  }
+
+  function verifyPointsInvariant(points) {
+    if (!points) throw new Error('Points array is required for quadtree to work');
+    if (typeof points.length !== 'number') throw new Error('Points should be array-like object');
+    if (points.length % 3 !== 0) throw new Error('Points array should consist of series of x,y,z coordinates and be multiple of 3');
   }
 
   function getBounds() {
@@ -184,3 +219,4 @@ function createTree(options) {
     return new TreeNode(bounds);
   }
 }
+

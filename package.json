@@ -19,5 +19,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/anvaka/yaot"
+  },
+  "dependencies": {
+    "rafor": "^1.0.1"
   }
 }
