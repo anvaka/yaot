@@ -1,6 +1,6 @@
 {
   "name": "yaot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Yet another octree",
   "main": "index.js",
   "scripts": {
