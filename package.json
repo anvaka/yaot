@@ -4,7 +4,7 @@
   "description": "Yet another octree",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tap test/*.js"
   },
   "keywords": [
     "quadtree",
@@ -22,5 +22,8 @@
   },
   "dependencies": {
     "rafor": "^1.0.2"
+  },
+  "devDependencies": {
+    "tap": "^1.3.2"
   }
 }

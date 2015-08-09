@@ -1,3 +1,8 @@
+/**
+ * Represents octree data structure
+ *
+ * https://en.wikipedia.org/wiki/Octree
+ */
 var Bounds3 = require('./lib/bounds3.js');
 var TreeNode = require('./lib/treeNode.js');
 var EmptyRegion = new Bounds3();
@@ -12,8 +17,35 @@ function createTree(options) {
   var root;
   var originalArray;
   var api = {
-    init: init,
+    /**
+     * Initializes tree asynchronously. Very useful when you have millions
+     * of points and do not want to block rendering thread for too long.
+     *
+     * @param {number[]} points array of points for which we are building the
+     * tree. Flat sequence of (x, y, z) coordinates. Array length should be
+     * multiple of 3.
+     *
+     * @param {Function=} doneCallback called when tree is initialized. The
+     * callback will be called with single argument which represent current
+     * tree.
+     */
     initAsync: initAsync,
+
+    /**
+     * Synchronous version of `initAsync()`. Should only be used for small
+     * trees (less than 50-70k of points).
+     *
+     * @param {number[]} points array of points for which we are building the
+     * tree. Flat sequence of (x, y, z) coordinates. Array length should be
+     * multiple of 3.
+     */
+    init: init,
+
+    /**
+     * Gets bounds of the root node. Bounds are represented by center of the
+     * node (x, y, z) and `half` attribute - distance from the center to an
+     * edge of the root node.
+     */
     bounds: getBounds,
 
     /**
@@ -39,6 +71,10 @@ function createTree(options) {
      * area.
      */
     intersectSphere: intersectSphere,
+
+    /**
+     * Gets root node of the tree
+     */
     getRoot: getRoot
   };
 
