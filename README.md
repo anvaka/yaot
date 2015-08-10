@@ -1,4 +1,4 @@
-# yaot
+# yaot [![Build Status](https://travis-ci.org/anvaka/yaot.svg)](https://travis-ci.org/anvaka/yaot)
 
 Octree in javascript. Extremely fast module to query points in 3D space. Can
 be used to find points under mouse cursor in 3D scene.
@@ -26,7 +26,7 @@ var matches = tree.intersectSphere(0, 0, 0, 2);
 
 // Let's extend our sphere:
 var matches = tree.intersectSphere(0, 0, 0, 20);
-// matches[0] === 0 -> Point at 0 is here too
+// matches[0] === 0 -> Point at index 0 is here too
 // matches[1] === 3 -> Point at index 3 from `points` array also inisde
 ```
 

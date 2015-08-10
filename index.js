@@ -126,7 +126,9 @@ function createTree(options) {
 
     if (near === undefined) near = 0;
     if (far === undefined) far = Number.POSITIVE_INFINITY;
+    // we save as squar, to avoid expensive sqrt() operation
     near *= near;
+    far *= far;
 
     var indices = [];
     root.query(indices, originalArray, intersectCheck, farEnough);
@@ -152,9 +154,9 @@ function createTree(options) {
 
     function farEnough(x, y, z) {
       var dist = (x - rayOrigin.x) * (x - rayOrigin.x) +
-                  (y - rayOrigin.y) * (y - rayOrigin.y) +
-                  (z - rayOrigin.z) * (z - rayOrigin.z);
-      return dist >= near;
+                 (y - rayOrigin.y) * (y - rayOrigin.y) +
+                 (z - rayOrigin.z) * (z - rayOrigin.z);
+      return near <= dist && dist <= far;
     }
 
     function byDistanceToCamera(idx0, idx1) {
