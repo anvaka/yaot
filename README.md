@@ -30,6 +30,30 @@ var matches = tree.intersectSphere(0, 0, 0, 20);
 // matches[1] === 3 -> Point at index 3 from `points` array also inisde
 ```
 
+You can also query points which lies inside octants intersected by a ray. This
+is very useful when you want to know which points lie under mouse cursor.
+
+``` js
+var rayOrigin = {
+  x: 1, y: 0, z: 0
+};
+var rayDirection = {
+  x: -1, y: 0, z: 0
+};
+var matches = tree.intersectRay(rayOrigin, rayDirection)
+
+// If you want to limit where ray starts checking against intersection
+// you can pass option `near` argumnet:
+var near = 10; // by default it is 0, but could be made bigger!
+var matches10PixelsAway = tree.intersectRay(rayOrigin, rayDirection, near);
+
+// You can also limit upper bound by setting `far` argument:
+var far = 100; // By default it is positive infinity, which matches all.
+var matchesPointsBetween10And100Pixels =
+    tree.intersectRay(rayOrigin, rayDirection, near, far);
+```
+
+
 # install
 
 With [npm](https://npmjs.org) do:

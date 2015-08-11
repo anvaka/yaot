@@ -38,7 +38,7 @@ test('it can intersect ray', function(t) {
   };
   var rayDirection = {
     x: -1, y: 0, z: 0
-  }
+  };
   var matches = tree.intersectRay(rayOrigin, rayDirection)
   t.equals(matches.length, 2, 'Ray intersects both points');
   t.equals(matches[0], 0, 'First point is at index 0');
