@@ -1,0 +1,21 @@
+
+> yaot@1.1.2 perf /Users/anvaka/projects/ngraphjs/experiments/yaot
+> npm version && node perf/index.js
+
+{ yaot: '1.1.2',
+  npm: '2.10.1',
+  http_parser: '2.3',
+  modules: '14',
+  node: '0.12.4',
+  openssl: '1.0.1m',
+  uv: '1.5.0',
+  v8: '3.28.71.19',
+  zlib: '1.2.8' }
+init tree with 10k points x 186 ops/sec ±2.46% (78 runs sampled)
+Intersect sphere (r = 20) tree with 100k points x 336,607 ops/sec ±1.29% (91 runs sampled)
+Intersect sphere (r = 200) tree with 100k points x 295,587 ops/sec ±1.16% (82 runs sampled)
+Intersect sphere (r = 0) tree with 100k points x 6,421,144 ops/sec ±0.99% (86 runs sampled)
+Intersect ray shot from the center into random direction x 10,477 ops/sec ±1.30% (90 runs sampled)
+Intersect ray shot from the edge into center x 18,417 ops/sec ±1.74% (86 runs sampled)
+Intersect ray shot from the edge outside x 259,737 ops/sec ±1.40% (83 runs sampled)
+Done!

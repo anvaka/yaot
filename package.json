@@ -4,7 +4,8 @@
   "description": "Yet another octree",
   "main": "index.js",
   "scripts": {
-    "test": "tap test/*.js"
+    "test": "tap test/*.js",
+    "perf": "npm version && node perf/index.js"
   },
   "keywords": [
     "quadtree",
@@ -24,6 +25,7 @@
     "rafor": "^1.0.2"
   },
   "devDependencies": {
+    "benchmark": "^1.0.0",
     "tap": "^1.3.2"
   }
 }
