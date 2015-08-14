@@ -53,6 +53,9 @@ var matchesPointsBetween10And100Pixels =
     tree.intersectRay(rayOrigin, rayDirection, near, far);
 ```
 
+# demo
+
+This module is used in the [code galaxies](http://anvaka.github.io/pm/). Source code is [here](https://github.com/anvaka/unrender/blob/master/lib/hit-test.js).
 
 # install
 
