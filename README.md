@@ -53,9 +53,23 @@ var matchesPointsBetween10And100Pixels =
     tree.intersectRay(rayOrigin, rayDirection, near, far);
 ```
 
+To see how to use it with three.js please read about demo below.
+
 # demo
 
-This module is used in the [code galaxies](http://anvaka.github.io/pm/). Source code is [here](https://github.com/anvaka/unrender/blob/master/lib/hit-test.js).
+A three.js demo is available [here](http://anvaka.github.io/yaot/demo/octree.html) ([src](https://github.com/anvaka/yaot/blob/master/demo/octree.js#L104)).
+You can compare its performance to native three.js [`raycaster.intersectObjects()`
+method](http://anvaka.github.io/yaot/demo/raycaster.html) ([src](https://github.com/anvaka/yaot/blob/master/demo/raycaster.js#L103)).
+Open dev console on both pages to see the timers. Octree solution is 42 times faster than
+native `raycaster.intersectObjects()`.
+
+Video comparison is available here: https://www.youtube.com/watch?v=9Z-Yzb-WSKg
+
+Keep in mind that raycaster is generalized solution which works with any three.js
+objects, while octree is very much specialized.
+
+This module is also used in the [code galaxies](http://anvaka.github.io/pm/).
+Source code is [here](https://github.com/anvaka/unrender/blob/master/lib/hit-test.js).
 
 # install
 
