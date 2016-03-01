@@ -1,7 +1,8 @@
 # yaot [![Build Status](https://travis-ci.org/anvaka/yaot.svg)](https://travis-ci.org/anvaka/yaot)
 
 Octree in javascript. Extremely fast module to query points in 3D space. Can
-be used to find points under mouse cursor in 3D scene.
+be used to find points under mouse cursor in 3D scene. Compare: [hit-test
+speed with native three.js vs octree](https://www.youtube.com/watch?v=9Z-Yzb-WSKg)
 
 # usage
 
@@ -62,8 +63,6 @@ You can compare its performance to native three.js [`raycaster.intersectObjects(
 method](http://anvaka.github.io/yaot/demo/raycaster.html) ([src](https://github.com/anvaka/yaot/blob/master/demo/raycaster.js#L103)).
 Open dev console on both pages to see the timers. Octree solution is 42 times faster than
 native `raycaster.intersectObjects()`.
-
-Video comparison is available here: https://www.youtube.com/watch?v=9Z-Yzb-WSKg
 
 Keep in mind that raycaster is generalized solution which works with any three.js
 objects, while octree is very much specialized.
